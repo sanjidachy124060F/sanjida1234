@@ -11,20 +11,44 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:secondapp/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Login and navigation test', (WidgetTester tester) async {
+    // Build the app
+    await tester.pumpWidget(SocialOrgApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify we are on Login Page
+    expect(find.text('Login'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Enter non-admin credentials and login
+    await tester.enterText(find.byType(TextField).first, 'user@example.com');
+    await tester.enterText(find.byType(TextField).last, 'password');
+    await tester.tap(find.text('Login'));
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Expect to be on Home Page
+    expect(find.text('Members'), findsOneWidget);
+
+    // Go back to Login Page
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // Enter 'admin' to test admin login
+    await tester.enterText(find.byType(TextField).first, 'admin');
+    await tester.enterText(find.byType(TextField).last, 'adminpass');
+    await tester.tap(find.text('Login'));
+    await tester.pumpAndSettle();
+
+    // Expect to be on Admin Page
+    expect(find.text('Admin Panel'), findsOneWidget);
+
+    // Go back to Login Page
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // Tap "No account? Sign up"
+    await tester.tap(find.text('No account? Sign up'));
+    await tester.pumpAndSettle();
+
+    // Expect to be on SignUp Page
+    expect(find.text('Sign Up'), findsOneWidget);
   });
 }

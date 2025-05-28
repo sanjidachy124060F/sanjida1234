@@ -1,20 +1,26 @@
-import 'package:secondapp/home.dart';
 import 'package:flutter/material.dart';
+import 'login_page.dart';
+import 'signup_page.dart';
+import 'home_page.dart';
+import 'admin_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(SocialOrgApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class SocialOrgApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Flutter App",
-      theme: ThemeData.dark(),
-      home: HomePage(),
+      title: 'Social Org App',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginPage(),
+        '/signup': (context) => SignUpPage(),
+        '/home': (context) => HomePage(),
+        '/admin': (context) => AdminPage(),
+      },
     );
   }
 }
